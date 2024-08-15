@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -26,10 +27,23 @@ export class UsersService {
     });
   }
 
-  async findOne(id: string) {
+  async findOneById(id: string) {
     return this.prisma.users.findUnique({
       where: { id: id },
     });
+  }
+
+  async findByEmail(email: string){
+    return this.prisma.users.findUnique({
+      where: {email: email}
+    })
+  }
+
+  async updateToken(id: string, refreshToken: string){
+    return this.prisma.users.update({
+      where: {id: id},
+      data: { refreshToken: refreshToken },
+    })
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {

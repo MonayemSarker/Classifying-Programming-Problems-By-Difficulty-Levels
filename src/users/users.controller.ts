@@ -3,16 +3,23 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthUserService } from './auth-user.service';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @ApiTags('User')
 @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService, private readonly authservice: AuthUserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    return this.authservice.create(createUserDto);
+  }
+
+  @Post('login')
+  async login(@Body() {email, password}: LoginUserDto){
+    return this.authservice.login(email, password);
   }
 
   @Get()
@@ -22,7 +29,7 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    return this.usersService.findOneById(id);
   }
 
   @Patch(':id')
