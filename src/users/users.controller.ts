@@ -1,25 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUserService } from './auth-user.service';
 import { LoginUserDto } from './dto/login-user.dto';
+import { Request } from 'express';
 
 @ApiTags('User')
 @ApiBearerAuth()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService, private readonly authservice: AuthUserService) {}
+  constructor(private readonly usersService: UsersService, private readonly authService: AuthUserService) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    return this.authservice.create(createUserDto);
+    return this.authService.create(createUserDto);
   }
 
   @Post('login')
   async login(@Body() {email, password}: LoginUserDto){
-    return this.authservice.login(email, password);
+    return this.authService.login(email, password);
   }
 
   @Get()
@@ -30,6 +31,11 @@ export class UsersController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOneById(id);
+  }
+
+  @Get('logout')
+  logout(@Req() req: Request) {
+    this.authService.logout(req.user['sub']);
   }
 
   @Patch(':id')
