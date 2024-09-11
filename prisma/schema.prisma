@@ -25,11 +25,6 @@ model users {
   updatedAt    DateTime @updatedAt
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
 model problemSets {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   name             String
@@ -48,4 +43,15 @@ model problems {
   ranked_score     Int?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+}
+
+model participants {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String   @unique
+  name        String
+  designation String
+  location    String
+  institution String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

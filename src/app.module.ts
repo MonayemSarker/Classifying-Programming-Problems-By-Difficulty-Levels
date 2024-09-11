@@ -4,11 +4,12 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProblemsModule } from './problems/problems.module';
+import { ParticipantsModule } from './participants/participants.module';
 
 @Module({
   imports: [UsersModule, ConfigModule.forRoot({
     isGlobal: true,
-  }), ProblemsModule,],
+  }), ProblemsModule, ParticipantsModule,],
   controllers: [AppController],
   providers: [AppService],
 })
