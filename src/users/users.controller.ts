@@ -43,9 +43,10 @@ export class UsersController {
     this.authService.logout(req.user['sub']);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @UseGuards(AccessTokenGuard)
+  @Patch('')
+  update(@Body() updateUserDto: UpdateUserDto, @Req() req: Request) {
+    return this.usersService.update(req.user['sub'], updateUserDto);
   }
 
   @Delete(':id')

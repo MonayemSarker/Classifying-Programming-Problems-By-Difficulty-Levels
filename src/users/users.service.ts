@@ -3,11 +3,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ObjectId } from 'mongodb';
+import * as argon2 from 'argon2';
 
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createUserDto: CreateUserDto) {
     return this.prisma.users.create({
@@ -37,24 +38,28 @@ export class UsersService {
     });
   }
 
-  async findByEmail(email: string){
+  async findByEmail(email: string) {
     return this.prisma.users.findUnique({
-      where: {email: email}
+      where: { email: email }
     })
   }
 
-  async updateToken(id: string, refreshToken: string){
+  async updateToken(id: string, refreshToken: string) {
     // console.log(id, refreshToken);
     if (!ObjectId.isValid(id)) {
       throw new Error('Invalid ID format');
     }
     return this.prisma.users.update({
-      where: {id: id},
+      where: { id: id },
       data: { refreshToken: refreshToken },
     })
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
+    const { password } = updateUserDto;
+    const hash = await argon2.hash(password);
+    updateUserDto.password = hash;
+
     return this.prisma.users.update({
       where: { id: id },
       data: updateUserDto,
