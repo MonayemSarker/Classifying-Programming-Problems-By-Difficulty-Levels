@@ -1,11 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ProblemsService {
-  create(createProblemDto: CreateProblemDto) {
-    return 'This action adds a new problem';
+  constructor(private prisma: PrismaService) { }
+
+  create(createProblemDto: CreateProblemDto, uploader_user_id: string) {
+    return this.prisma.problems.create({
+      data: {
+        ...createProblemDto,
+        uploader_user_id,
+        ranked_score: null,
+        problemSet_id: null
+      },
+    });
   }
 
   findAll() {

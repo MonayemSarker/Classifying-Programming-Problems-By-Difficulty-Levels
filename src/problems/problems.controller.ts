@@ -1,15 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ProblemsService } from './problems.service';
 import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AccessTokenGuard } from 'src/users/guard/accessToken.guard';
+import { Request } from 'express';
 
+@ApiBearerAuth()
+@ApiTags('Problems')
 @Controller('problems')
 export class ProblemsController {
-  constructor(private readonly problemsService: ProblemsService) {}
+  constructor(private readonly problemsService: ProblemsService) { }
 
+  @UseGuards(AccessTokenGuard)
   @Post()
-  create(@Body() createProblemDto: CreateProblemDto) {
-    return this.problemsService.create(createProblemDto);
+  create(@Body() createProblemDto: CreateProblemDto, @Req() req: Request) {
+    return this.problemsService.create(createProblemDto, req.user['sub']);
   }
 
   @Get()

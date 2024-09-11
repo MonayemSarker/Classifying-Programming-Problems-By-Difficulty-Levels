@@ -40,12 +40,12 @@ model problemSets {
 
 model problems {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  problemSet_id    String   @db.ObjectId
+  problemSet_id    String?  @db.ObjectId
   uploader_user_id String   @db.ObjectId
   description      String
   code             String
   initial_score    Int
-  ranked_score     Int
+  ranked_score     Int?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
