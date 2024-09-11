@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateProblemSetDto } from './dto/create-problem-set.dto';
 
 @Injectable()
 export class ProblemsService {
@@ -15,6 +16,15 @@ export class ProblemsService {
         ranked_score: null,
         problemSet_id: null
       },
+    });
+  }
+
+  createProblemSet(createProblemSetDto: CreateProblemSetDto, uploader_user_id: string) {
+    return this.prisma.problemSets.create({
+      data: {
+        ...createProblemSetDto,
+        uploader_user_id
+      }
     });
   }
 

@@ -1,0 +1,3 @@
+DATABASE_URL="mongodb+srv://mirajmonayem:hMQfnFyz21V4boy0@cluster0.ewrpv.mongodb.net/SPL3"
+JWT_SECRET_KEY = 'ABCDEFGHIJ'
+JWT_REFRESH_TOKEN = 'This should be random token'
