@@ -4,6 +4,8 @@ import { UpdateProblemDto } from './dto/update-problem.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProblemSetDto } from './dto/create-problem-set.dto';
 
+
+
 @Injectable()
 export class ProblemsService {
   constructor(private prisma: PrismaService) { }
@@ -26,6 +28,10 @@ export class ProblemsService {
         uploader_user_id
       }
     });
+  }
+
+  bulkUploadToProblemSet() {
+
   }
 
   findAll() {
