@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ObjectId } from 'mongodb';
 
 
 @Injectable()
@@ -28,8 +29,11 @@ export class UsersService {
   }
 
   async findOneById(id: string) {
+    if (!ObjectId.isValid(id)) {
+      throw new Error('Invalid ID format');
+    }
     return this.prisma.users.findUnique({
-      where: { id: id },
+      where: { id },
     });
   }
 
@@ -40,6 +44,10 @@ export class UsersService {
   }
 
   async updateToken(id: string, refreshToken: string){
+    // console.log(id, refreshToken);
+    if (!ObjectId.isValid(id)) {
+      throw new Error('Invalid ID format');
+    }
     return this.prisma.users.update({
       where: {id: id},
       data: { refreshToken: refreshToken },

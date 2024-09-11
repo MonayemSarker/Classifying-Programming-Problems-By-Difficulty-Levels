@@ -33,6 +33,8 @@ import {
   
     async login(email: string, password: string) {
       const user = await this.userService.findByEmail(email);
+      // console.log(user);
+      
       if (!user) {
         throw new BadRequestException('No user found with this email');
       }

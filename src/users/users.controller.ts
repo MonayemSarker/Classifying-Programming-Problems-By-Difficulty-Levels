@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,6 +6,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthUserService } from './auth-user.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { Request } from 'express';
+import { AccessTokenGuard } from './guard/accessToken.guard';
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -13,6 +14,7 @@ import { Request } from 'express';
 export class UsersController {
   constructor(private readonly usersService: UsersService, private readonly authService: AuthUserService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return this.authService.create(createUserDto);
@@ -23,6 +25,7 @@ export class UsersController {
     return this.authService.login(email, password);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();
@@ -33,8 +36,10 @@ export class UsersController {
     return this.usersService.findOneById(id);
   }
 
-  @Get('logout')
+  @UseGuards(AccessTokenGuard)
+  @Put('logout')
   logout(@Req() req: Request) {
+    // console.log("User details",req.user);
     this.authService.logout(req.user['sub']);
   }
 
