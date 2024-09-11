@@ -30,14 +30,14 @@ export class ProblemsController {
     return this.problemsService.createProblemSet(createProblemSetDto, req.user['sub']);
   }
 
-  // @UseGuards(AccessTokenGuard)
+  @UseGuards(AccessTokenGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'CSV file to upload',
     required: true,
     type: 'file'
   })
-  @Post('set/upload')
+  @Post('set/:id/upload')
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads',
@@ -53,17 +53,17 @@ export class ProblemsController {
       cb(null, true);
     }
   }))
-  async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<void> {
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Param('id') problemSetId: string, @Req() req: Request) {
+    // console.log("Problem Set Id", problemSetId);
 
     const problems = [];
     fs.createReadStream(file.path)
       .pipe(csv())
       .on('data', (data) => problems.push(data))
       .on('end', () => {
-        //implement loop for problem creation
-        console.log(problems);
+        return this.problemsService.bulkUploadToProblemSet(problems, problemSetId, req.user['sub'])
+        // console.log(problems);
       });
-
   }
 
   @Get()

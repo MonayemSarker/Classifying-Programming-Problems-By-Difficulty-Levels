@@ -30,8 +30,23 @@ export class ProblemsService {
     });
   }
 
-  bulkUploadToProblemSet() {
+  async bulkUploadToProblemSet(problems: any[], problemSet_id: string, uploader_user_id) {
+    const results = await Promise.all(problems.map(async (problem) => {
+      return await this.prisma.problems.create({
+        data: {
+          description: problem.description,
+          code: problem.code,
+          initial_score: Number(problem.initial_score),
+          uploader_user_id,
+          ranked_score: null,
+          problemSet_id,
+        },
+      });
+    })
+    );
+    console.log(results);
 
+    return results;
   }
 
   findAll() {
