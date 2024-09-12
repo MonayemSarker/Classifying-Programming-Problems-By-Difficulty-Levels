@@ -1,0 +1,21 @@
+
+//admin
+
+Authentication--
+Log in--
+Log out--
+add admin--
+profile management--
+add problem set from csv
+remove problems
+update problems
+send survey invitation for a problem set
+watch survey result
+crud survey-perticipants
+
+
+//survey perticipants
+
+start a survey for a problem set with given code
+save the survey results
+

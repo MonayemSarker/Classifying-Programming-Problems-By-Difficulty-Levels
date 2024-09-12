@@ -1,26 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateParticipantDto } from './dto/create-participant.dto';
 import { UpdateParticipantDto } from './dto/update-participant.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ParticipantsService {
-  create(createParticipantDto: CreateParticipantDto) {
-    return 'This action adds a new participant';
+
+  constructor(private prisma: PrismaService) { }
+
+  async findByEmail(email: string) {
+    return this.prisma.participants.findUnique({
+      where: { email: email }
+    })
   }
 
-  findAll() {
-    return `This action returns all participants`;
+  async create(createParticipantDto: CreateParticipantDto) {
+    const participantExist = await this.findByEmail(createParticipantDto.email)
+
+    if (participantExist) {
+      throw new BadRequestException('Participant exist already');
+    }
+
+    return this.prisma.participants.create({
+      data: createParticipantDto
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} participant`;
+  async findAll() {
+    return this.prisma.participants.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        designation: true,
+        location: true,
+        institution: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
-  update(id: number, updateParticipantDto: UpdateParticipantDto) {
-    return `This action updates a #${id} participant`;
+  async findOneById(id: string) {
+    return this.prisma.participants.findUnique({
+      where: { id },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} participant`;
+  async remove(id: string) {
+    return this.prisma.participants.delete({
+      where: { id },
+    });
   }
 }
