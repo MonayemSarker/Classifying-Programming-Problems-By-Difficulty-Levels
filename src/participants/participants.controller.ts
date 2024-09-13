@@ -2,16 +2,17 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Uplo
 import { ParticipantsService } from './participants.service';
 import { CreateParticipantDto } from './dto/create-participant.dto';
 import { UpdateParticipantDto } from './dto/update-participant.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/users/guard/accessToken.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import * as fs from 'fs';
 import * as csv from 'csv-parser';
 
+@ApiBearerAuth()
 @ApiTags('Participants')
 @Controller('participants')
-// @UseGuards(AccessTokenGuard)
+@UseGuards(AccessTokenGuard)
 export class ParticipantsController {
   constructor(private readonly participantsService: ParticipantsService) { }
 

@@ -3,6 +3,8 @@ import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProblemSetDto } from './dto/create-problem-set.dto';
+import * as path from 'path';
+import * as fs from 'fs';
 
 
 
@@ -10,8 +12,16 @@ import { CreateProblemSetDto } from './dto/create-problem-set.dto';
 export class ProblemsService {
   constructor(private prisma: PrismaService) { }
 
-  create(createProblemDto: CreateProblemDto, uploader_user_id: string) {
-    return this.prisma.problems.create({
+  saveCodeToFile(problem: any) {
+    const filePath = path.join('src', 'problems', 'codes', `${problem.id}.txt`);
+    fs.writeFileSync(filePath, problem.code, 'utf8');
+  }
+
+  async create(createProblemDto: CreateProblemDto, uploader_user_id: string) {
+    console.log(createProblemDto);
+
+    createProblemDto.code = createProblemDto.code.replace(/\\n/g, '\n');
+    const problem = await this.prisma.problems.create({
       data: {
         ...createProblemDto,
         uploader_user_id,
@@ -19,6 +29,8 @@ export class ProblemsService {
         problemSet_id: null
       },
     });
+    await this.saveCodeToFile(problem);
+    return problem;
   }
 
   createProblemSet(createProblemSetDto: CreateProblemSetDto, uploader_user_id: string) {
@@ -32,7 +44,8 @@ export class ProblemsService {
 
   async bulkUploadToProblemSet(problems: any[], problemSet_id: string, uploader_user_id) {
     const results = await Promise.all(problems.map(async (problem) => {
-      return await this.prisma.problems.create({
+      problem.code = problem.code.replace(/\\n/g, '\n');
+      const createdProblem = await this.prisma.problems.create({
         data: {
           description: problem.description,
           code: problem.code,
@@ -42,6 +55,8 @@ export class ProblemsService {
           problemSet_id,
         },
       });
+      await this.saveCodeToFile(createdProblem);
+      return createdProblem;
     })
     );
     // console.log(results);

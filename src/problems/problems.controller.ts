@@ -15,22 +15,20 @@ import * as fs from 'fs';
 @ApiBearerAuth()
 @ApiTags('Problems')
 @Controller('problems')
+@UseGuards(AccessTokenGuard)
 export class ProblemsController {
   constructor(private readonly problemsService: ProblemsService) { }
 
-  @UseGuards(AccessTokenGuard)
   @Post()
   create(@Body() createProblemDto: CreateProblemDto, @Req() req: Request) {
     return this.problemsService.create(createProblemDto, req.user['sub']);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post('set')
   createProblemSet(@Body() createProblemSetDto: CreateProblemSetDto, @Req() req: Request) {
     return this.problemsService.createProblemSet(createProblemSetDto, req.user['sub']);
   }
 
-  @UseGuards(AccessTokenGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'CSV file to upload',
