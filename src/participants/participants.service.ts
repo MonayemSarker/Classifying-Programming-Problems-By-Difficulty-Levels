@@ -26,6 +26,30 @@ export class ParticipantsService {
     })
   }
 
+  async bulkCreate(participants: any[]) {
+    const results = await Promise.all(participants.map(async (participant) => {
+      const participantExist = await this.findByEmail(participant.email)
+      if (!participantExist) {
+        return await this.prisma.participants.create({
+          data: {
+            email: participant.email,
+            name: participant.name,
+            designation: participant.designation,
+            location: participant.location,
+            institution: participant.institution
+          },
+        });
+      }
+      else {
+        return "Already existing participant"
+      }
+    })
+    );
+    console.log(results);
+
+    return results;
+  }
+
   async findAll() {
     return this.prisma.participants.findMany({
       select: {

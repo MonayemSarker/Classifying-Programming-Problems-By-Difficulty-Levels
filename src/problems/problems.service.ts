@@ -44,7 +44,7 @@ export class ProblemsService {
       });
     })
     );
-    console.log(results);
+    // console.log(results);
 
     return results;
   }
