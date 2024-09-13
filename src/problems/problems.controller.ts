@@ -15,7 +15,7 @@ import * as fs from 'fs';
 @ApiBearerAuth()
 @ApiTags('Problems')
 @Controller('problems')
-@UseGuards(AccessTokenGuard)
+// @UseGuards(AccessTokenGuard)
 export class ProblemsController {
   constructor(private readonly problemsService: ProblemsService) { }
 
@@ -71,16 +71,16 @@ export class ProblemsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.problemsService.findOne(+id);
+    return this.problemsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProblemDto: UpdateProblemDto) {
-    return this.problemsService.update(+id, updateProblemDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateProblemDto: UpdateProblemDto) {
+  //   return this.problemsService.update(id, updateProblemDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.problemsService.remove(+id);
+    return this.problemsService.remove(id);
   }
 }

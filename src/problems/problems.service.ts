@@ -65,18 +65,22 @@ export class ProblemsService {
   }
 
   findAll() {
-    return `This action returns all problems`;
+    return this.prisma.problems.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} problem`;
+  findOne(id: string) {
+    return this.prisma.problems.findUnique({
+      where: { id }
+    });
   }
 
-  update(id: number, updateProblemDto: UpdateProblemDto) {
-    return `This action updates a #${id} problem`;
-  }
+  // update(id: string, updateProblemDto: UpdateProblemDto) {
+  //   return `This action updates a #${id} problem`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} problem`;
+  remove(id: string) {
+    return this.prisma.problems.delete({
+      where: { id }
+    });;
   }
 }
