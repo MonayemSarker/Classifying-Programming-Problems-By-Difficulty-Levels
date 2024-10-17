@@ -55,3 +55,29 @@ model participants {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model surveys {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  problemSet_id String   @db.ObjectId
+  created_by    String   @db.ObjectId
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model surveyParticipants {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  survey_id      String
+  participant_id String
+  survey_code    String
+  mail_sent      Boolean
+}
+
+model surveyDetails {
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  surveyParticipants_id String
+  problem_1_id          String
+  problem_2_id          String
+  difficult_problem_id  String
+  createdAt             DateTime @default(now())
+}
