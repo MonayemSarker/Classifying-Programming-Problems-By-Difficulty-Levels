@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb';
 import { ParticipantsService } from 'src/participants/participants.service';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { MailService } from './mail.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class SurveysService {
@@ -25,7 +26,8 @@ export class SurveysService {
     if (newSurvey) {
       const participants = await this.participantsService.findAll();
       participants.forEach(async participant => {
-        const surveyCode = "test";
+        const surveyCode = uuidv4();
+
         await this.prisma.surveyParticipants.create({
           data: {
             survey_id: newSurvey.id,
@@ -38,7 +40,6 @@ export class SurveysService {
           to: participant.email,
           surveyCode: surveyCode
         }
-
         //mailservice function invoke
         await this.mailService.sendEmail(emailDto);
       })

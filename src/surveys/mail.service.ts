@@ -23,7 +23,7 @@ export class MailService {
         const { to, surveyCode } = emailDto;
 
         const subject = 'Survey Invitation';
-        const text = `You are invited to participate in a survey. Use this code: <b>${surveyCode}</b>`
+        const text = `You are invited to participate in a survey. Use this code: ${surveyCode}`
 
         const transport = this.mailTransport();
         const options: nodemailer.SendMailOptions = {
