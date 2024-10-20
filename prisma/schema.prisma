@@ -57,12 +57,12 @@ model participants {
 }
 
 model surveys {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  problemSet_id String   @db.ObjectId
-  created_by    String   @db.ObjectId
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  problemSet_ids String[] @db.ObjectId
+  created_by     String   @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model surveyParticipants {
