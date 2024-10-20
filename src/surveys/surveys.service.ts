@@ -3,10 +3,13 @@ import { CreateSurveyDto } from './dto/create-survey.dto';
 import { UpdateSurveyDto } from './dto/update-survey.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ObjectId } from 'mongodb';
+import { ParticipantsService } from 'src/participants/participants.service';
+import { CreateEmailDto } from './dto/create-email.dto';
+import { MailService } from './mail.service';
 
 @Injectable()
 export class SurveysService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService, private participantsService: ParticipantsService, private mailService: MailService) { }
 
   async create(createSurveyDto: CreateSurveyDto, createdById: string) {
     const { name, problemSet_ids } = createSurveyDto;
@@ -17,6 +20,29 @@ export class SurveysService {
         created_by: createdById,
       },
     });
+
+    //after the survey has been created, surveyParticipants will be updated accordingly
+    if (newSurvey) {
+      const participants = await this.participantsService.findAll();
+      participants.forEach(async participant => {
+        const surveyCode = "test";
+        await this.prisma.surveyParticipants.create({
+          data: {
+            survey_id: newSurvey.id,
+            participant_id: participant.id,
+            survey_code: surveyCode
+          }
+        })
+        //TODO send mail to participants with survey code
+        const emailDto: CreateEmailDto = {
+          to: participant.email,
+          surveyCode: surveyCode
+        }
+
+        //mailservice function invoke
+        await this.mailService.sendEmail(emailDto);
+      })
+    }
 
     return newSurvey;
   }

@@ -66,11 +66,10 @@ model surveys {
 }
 
 model surveyParticipants {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
   survey_id      String
   participant_id String
   survey_code    String
-  mail_sent      Boolean
 }
 
 model surveyDetails {
