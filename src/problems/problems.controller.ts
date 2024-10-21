@@ -15,7 +15,7 @@ import * as fs from 'fs';
 @ApiBearerAuth()
 @ApiTags('Problems')
 @Controller('problems')
-// @UseGuards(AccessTokenGuard)
+@UseGuards(AccessTokenGuard)
 export class ProblemsController {
   constructor(private readonly problemsService: ProblemsService) { }
 

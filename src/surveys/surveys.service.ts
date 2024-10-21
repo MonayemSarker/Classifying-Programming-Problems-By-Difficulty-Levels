@@ -7,10 +7,16 @@ import { ParticipantsService } from 'src/participants/participants.service';
 import { CreateEmailDto } from './dto/create-email.dto';
 import { MailService } from './mail.service';
 import { v4 as uuidv4 } from 'uuid';
+import { SurveyDetailService } from './survey-details.service';
 
 @Injectable()
 export class SurveysService {
-  constructor(private prisma: PrismaService, private participantsService: ParticipantsService, private mailService: MailService) { }
+  constructor(
+    private prisma: PrismaService,
+    private participantsService: ParticipantsService,
+    private mailService: MailService,
+    private surveyDetailService: SurveyDetailService
+  ) { }
 
   async create(createSurveyDto: CreateSurveyDto, createdById: string) {
     const { name, problemSet_ids } = createSurveyDto;
@@ -25,24 +31,37 @@ export class SurveysService {
     //after the survey has been created, surveyParticipants will be updated accordingly
     if (newSurvey) {
       const participants = await this.participantsService.findAll();
+
+      const problems = await this.prisma.problems.findMany({
+        where: {
+          problemSet_id: {
+            in: problemSet_ids,
+          },
+        },
+      });
+
       participants.forEach(async participant => {
         const surveyCode = uuidv4();
 
-        await this.prisma.surveyParticipants.create({
+        const surveyParticipant = await this.prisma.surveyParticipants.create({
           data: {
             survey_id: newSurvey.id,
             participant_id: participant.id,
             survey_code: surveyCode
           }
         })
-        //TODO send mail to participants with survey code
-        const emailDto: CreateEmailDto = {
-          to: participant.email,
-          surveyCode: surveyCode
+        if (surveyParticipant) {
+          const emailDto: CreateEmailDto = {
+            to: participant.email,
+            surveyCode: surveyCode
+          }
+
+          await this.surveyDetailService.createSurveyDetails(surveyParticipant.id, problems);
+          await this.mailService.sendEmail(emailDto);
         }
-        //mailservice function invoke
-        await this.mailService.sendEmail(emailDto);
+
       })
+
     }
 
     return newSurvey;

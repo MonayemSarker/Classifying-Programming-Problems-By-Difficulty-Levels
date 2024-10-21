@@ -74,9 +74,9 @@ model surveyParticipants {
 
 model surveyDetails {
   id                    String   @id @default(auto()) @map("_id") @db.ObjectId
-  surveyParticipants_id String
-  problem_1_id          String
-  problem_2_id          String
-  difficult_problem_id  String
+  surveyParticipants_id String   @db.ObjectId
+  problem_1_id          String   @db.ObjectId
+  problem_2_id          String   @db.ObjectId
+  difficult_problem_id  String?  @db.ObjectId
   createdAt             DateTime @default(now())
 }

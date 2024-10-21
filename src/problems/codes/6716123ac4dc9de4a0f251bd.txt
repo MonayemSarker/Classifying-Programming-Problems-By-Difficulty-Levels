@@ -1,0 +1,10 @@
+my_string = input('Enter a string that is 5 characters long:')
+
+uppercase_string = ''
+for index in range(5):
+    if 'a' <= my_string[index] <= 'z':
+        uppercase_string += chr(ord(my_string[index]) - 32)
+    else:
+        uppercase_string += my_string[index]
+
+print(f'The uppercase string is {uppercase_string}')

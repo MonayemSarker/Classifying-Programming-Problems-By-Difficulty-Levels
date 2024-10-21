@@ -1,0 +1,38 @@
+score = 0
+
+answer1 = input('What is the value of 5+5?')
+if int(answer1) == 10:
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is 10')
+
+answer2 = input('What is the last name of Harry Potter?')
+if answer2.lower() == 'potter':
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is Potter')
+
+answer3 = input('What is the capital of Wales: A. Edinburgh B.Glasgow C. Cardiff')
+if answer3.lower() == 'c':
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is Cardiff')
+
+answer4 = input('What is the value of 15+5?')
+if int(answer4) == 20:
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is 20')
+
+answer5 = input('What is the last name of Harry Kane?')
+if answer5.lower() == 'kane':
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is Kane')
+
+print(f'Your total score is {score}')

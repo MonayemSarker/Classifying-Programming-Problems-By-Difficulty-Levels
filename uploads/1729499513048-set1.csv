@@ -1,0 +1,148 @@
+description,code,initial_score
+Write a program that prompts the user to enter their favourite number between 1 and 100. Store this value in a variable and generate two equations: one for addition and one for subtraction where both equations result in the favourite number.,"favourite_number = int(input('Please enter your favourite even number (1-100): '))
+my_number1 = 10
+my_number2 = favourite_number - my_number1
+my_number3 = 20
+my_number4 = favourite_number + my_number3
+
+if my_number2 < 0:
+    print(f'{my_number2} + {my_number1} = {favourite_number}')
+else:
+    print(f'{my_number1} + {my_number2} = {favourite_number}')
+
+print(f'{my_number4} - {my_number3} = {favourite_number}')",0
+"Write a program that solves a quadratic equation. Input values of a, b, and c, then calculate the roots based on the discriminant.","import math
+
+a = int(input('Enter the value of a:\n'))
+b = int(input('Enter the value of b:\n'))
+c = int(input('Enter the value of c:\n'))
+
+d = b**2 - 4*a*c
+
+if d < 0:
+    print('This equation has no real solution')
+elif d == 0:
+    x = -b / (2 * a)
+    print(f'This equation has one solution: {x}')
+else:
+    x1 = (-b + math.sqrt(d)) / (2 * a)
+    x2 = (-b - math.sqrt(d)) / (2 * a)
+    print(f'This equation has two solutions: {x1} and {x2}')",1
+Write a program to calculate the perimeter of an ellipse using Ramanujan’s approximation.,"import math
+
+a = int(input('Enter the value of major axis a:\n'))
+b = int(input('Enter the value of minor axis b:\n'))
+
+if a < b:
+    print('Major axis should be greater than minor axis.')
+else:
+    pi = 3.141592
+    h = (a - b) ** 2 / (a + b) ** 2
+    P = pi * (a + b) * (1 + (3 * h / (10 + math.sqrt(4 - 3 * h))))
+    print(f'The perimeter of the ellipse is {P}')",2
+Write a program that converts a five-character lowercase string to uppercase using ASCII values.,"my_string = input('Enter a string that is 5 characters long:')
+
+uppercase_string = ''
+for index in range(5):
+    if 'a' <= my_string[index] <= 'z':
+        uppercase_string += chr(ord(my_string[index]) - 32)
+    else:
+        uppercase_string += my_string[index]
+
+print(f'The uppercase string is {uppercase_string}')",1
+Write a program that subtracts two three-digit numbers using the elementary subtraction method.,"first_number = input('Enter first number:\n')
+second_number = input('Enter second number:\n')
+
+if first_number < second_number:
+    print('First number should be greater')
+else:
+    borrow = 0
+    third_digit = int(first_number[2]) - int(second_number[2])
+    if third_digit < 0:
+        third_digit += 10
+        borrow = 1
+    second_digit = int(first_number[1]) - int(second_number[1]) - borrow
+    borrow = 1 if second_digit < 0 else 0
+    second_digit = (second_digit + 10) if second_digit < 0 else second_digit
+    first_digit = int(first_number[0]) - int(second_number[0]) - borrow
+    result = f'{first_digit}{second_digit}{third_digit}'.lstrip('0')
+    print(f'The result is: {result}')",2
+Write a program that checks if a five-character string is a palindrome.,"my_string = input('Enter a string that is 5 characters long: ')
+
+if my_string[0] == my_string[4] and my_string[1] == my_string[3]:
+    print('It's a palindrome')
+else:
+    print('Not a palindrome')",1
+"Write a program that suggests a dish based on the user's choice of core ingredients, flavour, and spiciness.","core_ingredient = input('What do you like chicken or prawn: ')
+if core_ingredient == 'chicken':
+    cuisine = input('What cuisine do you prefer, Indian or Thai: ')
+    spiciness = input('You like your food hot or mild: ')
+
+    if cuisine == 'Indian' and spiciness == 'mild':
+        print('Chicken Korma')
+    elif cuisine == 'Indian' and spiciness == 'hot':
+        print('Chicken Tikka Masala')
+    elif cuisine == 'Thai' and spiciness == 'mild':
+        print('Thai Yellow Curry')
+    else:
+        print('Thai Green Curry')
+
+elif core_ingredient == 'prawn':
+    cuisine = input('What cuisine do you prefer, Thai or Malaysian: ')
+    spiciness = input('You like your food hot or mild: ')
+
+    if cuisine == 'Malaysian' and spiciness == 'mild':
+        print('Fried Butter Prawn')
+    else:
+        print('Prawn Laksa Curry Bowl')",1
+Write a program to compute the output of the given function based on input values of x and y.,"import math
+
+x = int(input('Enter the value of x: '))
+y = int(input('Enter the value of y: '))
+
+if x == y:
+    result = math.exp(x**2 + 1)
+elif x - 4 > y:
+    result = x**3 + 3
+else:
+    result = min(x, y)
+
+print(f'The result is {result}')",2
+Write a program that runs a five-question quiz.,"score = 0
+
+answer1 = input('What is the value of 5+5?')
+if int(answer1) == 10:
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is 10')
+
+answer2 = input('What is the last name of Harry Potter?')
+if answer2.lower() == 'potter':
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is Potter')
+
+answer3 = input('What is the capital of Wales: A. Edinburgh B.Glasgow C. Cardiff')
+if answer3.lower() == 'c':
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is Cardiff')
+
+answer4 = input('What is the value of 15+5?')
+if int(answer4) == 20:
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is 20')
+
+answer5 = input('What is the last name of Harry Kane?')
+if answer5.lower() == 'kane':
+    print('Correct!')
+    score += 1
+else:
+    print('The correct answer is Kane')
+
+print(f'Your total score is {score}')",0

@@ -1,0 +1,6 @@
+my_string = input('Enter a string that is 5 characters long: ')
+
+if my_string[0] == my_string[4] and my_string[1] == my_string[3]:
+    print('It's a palindrome')
+else:
+    print('Not a palindrome')
