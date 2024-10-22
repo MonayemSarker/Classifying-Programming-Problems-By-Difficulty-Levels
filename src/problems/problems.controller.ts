@@ -11,6 +11,7 @@ import { diskStorage } from 'multer';
 import { Express } from 'express';
 import * as csv from 'csv-parser';
 import * as fs from 'fs';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @ApiBearerAuth()
 @ApiTags('Problems')
@@ -64,6 +65,7 @@ export class ProblemsController {
       });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Get()
   findAll() {
     return this.problemsService.findAll();
