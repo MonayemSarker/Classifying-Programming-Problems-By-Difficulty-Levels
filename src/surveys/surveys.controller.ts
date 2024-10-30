@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
 import { SurveysService } from './surveys.service';
 import { Request } from 'express';
 import { CreateSurveyDto } from './dto/create-survey.dto';
 import { UpdateSurveyDto } from './dto/update-survey.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/users/guard/accessToken.guard';
+import { FilterSurveyDto } from './dto/filter-survey.dto';
 
 @ApiTags('Surveys')
 @ApiBearerAuth()
@@ -20,8 +21,8 @@ export class SurveysController {
   }
 
   @Get()
-  findAll() {
-    return this.surveysService.findAll();
+  findAll(@Query() filterDto: FilterSurveyDto) {
+    return this.surveysService.findAll(filterDto);
   }
 
   @Get(':id')

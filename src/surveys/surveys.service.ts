@@ -8,6 +8,7 @@ import { CreateEmailDto } from './dto/create-email.dto';
 import { MailService } from './mail.service';
 import { v4 as uuidv4 } from 'uuid';
 import { SurveyDetailService } from './survey-details.service';
+import { FilterSurveyDto } from './dto/filter-survey.dto';
 
 @Injectable()
 export class SurveysService {
@@ -67,8 +68,20 @@ export class SurveysService {
     return newSurvey;
   }
 
-  async findAll() {
-    const surveys = await this.prisma.surveys.findMany()
+  async findAll(filterDto: FilterSurveyDto) {
+    if (filterDto.name) {
+      const surveys = await this.prisma.surveys.findMany({
+        where: {
+          name: {
+            contains: filterDto.name,
+            mode: 'insensitive',
+          },
+        },
+      });
+      return surveys;
+    }
+
+    const surveys = await this.prisma.surveys.findMany();
     return surveys;
   }
 
