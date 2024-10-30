@@ -8,8 +8,8 @@ import { RefreshTokenStrategy } from './strategy/refreshToken.strategy';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports:[PrismaModule, JwtModule.register({}),],
+  imports: [PrismaModule, JwtModule.register({}),],
   controllers: [UsersController],
-  providers: [UsersService, AuthUserService, AccessTokenStrategy, RefreshTokenStrategy ],
+  providers: [UsersService, AuthUserService, AccessTokenStrategy, RefreshTokenStrategy],
 })
-export class UsersModule {}
+export class UsersModule { }

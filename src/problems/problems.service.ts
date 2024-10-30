@@ -68,6 +68,11 @@ export class ProblemsService {
     return this.prisma.problems.findMany();
   }
 
+
+  findAllProblemSet() {
+    return this.prisma.problemSets.findMany();
+  }
+
   findOne(id: string) {
     return this.prisma.problems.findUnique({
       where: { id }

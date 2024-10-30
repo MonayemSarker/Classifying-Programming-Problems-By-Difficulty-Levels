@@ -65,7 +65,12 @@ export class ProblemsController {
       });
   }
 
-  @UseInterceptors(CacheInterceptor)
+  @Get('sets')
+  findAllProblemSet() {
+    return this.problemsService.findAllProblemSet();
+  }
+
+  // @UseInterceptors(CacheInterceptor)
   @Get()
   findAll() {
     return this.problemsService.findAll();
@@ -75,6 +80,8 @@ export class ProblemsController {
   findOne(@Param('id') id: string) {
     return this.problemsService.findOne(id);
   }
+
+
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateProblemDto: UpdateProblemDto) {

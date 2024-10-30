@@ -1,0 +1,22 @@
+core_ingredient = input('What do you like chicken or prawn: ')
+if core_ingredient == 'chicken':
+    cuisine = input('What cuisine do you prefer, Indian or Thai: ')
+    spiciness = input('You like your food hot or mild: ')
+
+    if cuisine == 'Indian' and spiciness == 'mild':
+        print('Chicken Korma')
+    elif cuisine == 'Indian' and spiciness == 'hot':
+        print('Chicken Tikka Masala')
+    elif cuisine == 'Thai' and spiciness == 'mild':
+        print('Thai Yellow Curry')
+    else:
+        print('Thai Green Curry')
+
+elif core_ingredient == 'prawn':
+    cuisine = input('What cuisine do you prefer, Thai or Malaysian: ')
+    spiciness = input('You like your food hot or mild: ')
+
+    if cuisine == 'Malaysian' and spiciness == 'mild':
+        print('Fried Butter Prawn')
+    else:
+        print('Prawn Laksa Curry Bowl')
