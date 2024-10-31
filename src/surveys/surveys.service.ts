@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateSurveyDto } from './dto/create-survey.dto';
 import { UpdateSurveyDto } from './dto/update-survey.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,6 +9,7 @@ import { MailService } from './mail.service';
 import { v4 as uuidv4 } from 'uuid';
 import { SurveyDetailService } from './survey-details.service';
 import { FilterSurveyDto } from './dto/filter-survey.dto';
+import { ValidateSurveyDto } from './dto/validate-survey.dto';
 
 @Injectable()
 export class SurveysService {
@@ -101,6 +102,35 @@ export class SurveysService {
   // update(id: number, updateSurveyDto: UpdateSurveyDto) {
   //   return `This action updates a #${id} survey`;
   // }
+
+  async validateSurvey(validateSurveyDto: ValidateSurveyDto) {
+    const { key, email } = validateSurveyDto;
+
+    // Find the survey participant entry with the given code
+    const surveyParticipant = await this.prisma.surveyParticipants.findFirst({
+      where: {
+        survey_code: key
+      }
+    });
+    // console.log(surveyParticipant);
+
+    // If no survey participant found with this code
+    if (!surveyParticipant) {
+      throw new NotFoundException('Invalid survey code');
+    }
+
+    const participant = await this.participantsService.findOneById(surveyParticipant.participant_id)
+
+    // Check if the email matches the participant's email
+    if (participant.email !== email) {
+      throw new UnauthorizedException('Email does not match the survey participant');
+    }
+
+    // console.log(participant);
+
+    return participant;
+  }
+
 
   remove(id: string) {
     return this.prisma.surveys.delete({

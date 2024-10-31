@@ -6,25 +6,33 @@ import { UpdateSurveyDto } from './dto/update-survey.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/users/guard/accessToken.guard';
 import { FilterSurveyDto } from './dto/filter-survey.dto';
+import { ValidateSurveyDto } from './dto/validate-survey.dto';
 
 @ApiTags('Surveys')
 @ApiBearerAuth()
 @Controller('surveys')
-@UseGuards(AccessTokenGuard)
 export class SurveysController {
   constructor(private readonly surveysService: SurveysService) { }
 
+  @UseGuards(AccessTokenGuard)
   @ApiOperation({ summary: 'Create a new survey' })
   @Post()
   create(@Body() createSurveyDto: CreateSurveyDto, @Req() req: Request) {
     return this.surveysService.create(createSurveyDto, req.user['sub']);
   }
 
+  @Post('validate')
+  async validateSurvey(@Body() validateSurveyDto: ValidateSurveyDto) {
+    return await this.surveysService.validateSurvey(validateSurveyDto);
+  }
+
+  @UseGuards(AccessTokenGuard)
   @Get()
   findAll(@Query() filterDto: FilterSurveyDto) {
     return this.surveysService.findAll(filterDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.surveysService.findOne(id);
@@ -35,6 +43,7 @@ export class SurveysController {
   //   return this.surveysService.update(+id, updateSurveyDto);
   // }
 
+  @UseGuards(AccessTokenGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.surveysService.remove(id);
