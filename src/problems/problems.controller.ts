@@ -16,20 +16,22 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 @ApiBearerAuth()
 @ApiTags('Problems')
 @Controller('problems')
-@UseGuards(AccessTokenGuard)
 export class ProblemsController {
   constructor(private readonly problemsService: ProblemsService) { }
 
+  @UseGuards(AccessTokenGuard)
   @Post()
   create(@Body() createProblemDto: CreateProblemDto, @Req() req: Request) {
     return this.problemsService.create(createProblemDto, req.user['sub']);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post('set')
   createProblemSet(@Body() createProblemSetDto: CreateProblemSetDto, @Req() req: Request) {
     return this.problemsService.createProblemSet(createProblemSetDto, req.user['sub']);
   }
 
+  @UseGuards(AccessTokenGuard)
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     description: 'CSV file to upload',
@@ -65,11 +67,13 @@ export class ProblemsController {
       });
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get('sets')
   findAllProblemSet() {
     return this.problemsService.findAllProblemSet();
   }
 
+  @UseGuards(AccessTokenGuard)
   // @UseInterceptors(CacheInterceptor)
   @Get()
   findAll() {
@@ -81,13 +85,12 @@ export class ProblemsController {
     return this.problemsService.findOne(id);
   }
 
-
-
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateProblemDto: UpdateProblemDto) {
   //   return this.problemsService.update(id, updateProblemDto);
   // }
 
+  @UseGuards(AccessTokenGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.problemsService.remove(id);

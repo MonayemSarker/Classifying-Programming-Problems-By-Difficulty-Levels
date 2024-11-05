@@ -7,12 +7,14 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/users/guard/accessToken.guard';
 import { FilterSurveyDto } from './dto/filter-survey.dto';
 import { ValidateSurveyDto } from './dto/validate-survey.dto';
+import { UpdateDifficultyDto } from './dto/update-difficulty.dto';
+import { SurveyDetailService } from './survey-details.service';
 
 @ApiTags('Surveys')
 @ApiBearerAuth()
 @Controller('surveys')
 export class SurveysController {
-  constructor(private readonly surveysService: SurveysService) { }
+  constructor(private readonly surveysService: SurveysService, private readonly surveyDetailService: SurveyDetailService) { }
 
   @UseGuards(AccessTokenGuard)
   @ApiOperation({ summary: 'Create a new survey' })
@@ -24,6 +26,11 @@ export class SurveysController {
   @Post('validate')
   async validateSurvey(@Body() validateSurveyDto: ValidateSurveyDto) {
     return await this.surveysService.validateSurvey(validateSurveyDto);
+  }
+
+  @Post('update-difficulty')
+  async updateDifficulty(@Body() updateDifficultyDto: UpdateDifficultyDto) {
+    return await this.surveyDetailService.updateDifficulty(updateDifficultyDto);
   }
 
   @UseGuards(AccessTokenGuard)

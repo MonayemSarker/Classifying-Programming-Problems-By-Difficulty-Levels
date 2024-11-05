@@ -34,13 +34,13 @@ export class SurveysService {
     if (newSurvey) {
       const participants = await this.participantsService.findAll();
 
-      const problems = await this.prisma.problems.findMany({
-        where: {
-          problemSet_id: {
-            in: problemSet_ids,
-          },
-        },
-      });
+      // const problems = await this.prisma.problems.findMany({
+      //   where: {
+      //     problemSet_id: {
+      //       in: problemSet_ids,
+      //     },
+      //   },
+      // });
 
       participants.forEach(async participant => {
         const surveyCode = uuidv4();
@@ -58,7 +58,7 @@ export class SurveysService {
             surveyCode: surveyCode
           }
 
-          await this.surveyDetailService.createSurveyDetails(surveyParticipant.id, problems);
+          // await this.surveyDetailService.createSurveyDetails(surveyParticipant.id, problems);
           await this.mailService.sendEmail(emailDto);
         }
 
@@ -126,9 +126,39 @@ export class SurveysService {
       throw new UnauthorizedException('Email does not match the survey participant');
     }
 
-    // console.log(participant);
+    let surveyDetails = await this.prisma.surveyDetails.findMany({
+      where: {
+        surveyParticipants_id: surveyParticipant.id
+      }
+    })
 
-    return participant;
+    // console.log(surveyDetails);
+
+    //if already not exists, create
+    if (surveyDetails.length === 0) {
+
+      const survey = await this.findOne(surveyParticipant.survey_id)
+
+      const problems = await this.prisma.problems.findMany({
+        where: {
+          problemSet_id: {
+            in: survey.problemSet_ids,
+          },
+        },
+      });
+
+      await this.surveyDetailService.createSurveyDetails(surveyParticipant.id, problems);
+
+      // console.log(participant);
+      //return all the pairs of problems for this participants
+      surveyDetails = await this.prisma.surveyDetails.findMany({
+        where: {
+          surveyParticipants_id: surveyParticipant.id
+        }
+      })
+    }
+
+    return surveyDetails;
   }
 
 

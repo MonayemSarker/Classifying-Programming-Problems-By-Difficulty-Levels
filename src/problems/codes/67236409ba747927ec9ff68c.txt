@@ -1,0 +1,12 @@
+favourite_number = int(input('Please enter your favourite even number (1-100): '))
+my_number1 = 10
+my_number2 = favourite_number - my_number1
+my_number3 = 20
+my_number4 = favourite_number + my_number3
+
+if my_number2 < 0:
+    print(f'{my_number2} + {my_number1} = {favourite_number}')
+else:
+    print(f'{my_number1} + {my_number2} = {favourite_number}')
+
+print(f'{my_number4} - {my_number3} = {favourite_number}')
